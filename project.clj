@@ -1,4 +1,4 @@
-(defproject immutant-web-component "0.2.0"
+(defproject immutant-web-component "0.2.0-SNAPSHOT"
   :description "A component for the Immutant Web Server."
   :url "http://github.com/zonotope/immutant-web-component"
   :license {:name "The MIT License"
