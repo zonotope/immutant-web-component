@@ -1,6 +1,7 @@
-(ns immutant.component.web
+(ns immutant-web-component.core
   (:require [com.stuartsierra.component :as component]
-            [immutant.web :as web]))
+            [immutant.web :as web])
+  (:import java.net.ConnectException))
 
 (defrecord ImmutantWebServer [config handler server]
   component/Lifecycle

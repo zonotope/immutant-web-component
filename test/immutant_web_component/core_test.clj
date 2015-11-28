@@ -1,7 +1,7 @@
-(ns immutant.component.web-test
+(ns immutant-web-component.core-test
   (:require [clojure.test :refer :all]
             [com.stuartsierra.component :as component]
-            [immutant.component.web :refer :all]
+            [immutant-web-component.core :refer :all]
             [clj-http.client :as http])
   (:import java.net.ConnectException))
 
