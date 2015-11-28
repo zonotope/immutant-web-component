@@ -5,4 +5,6 @@
             :url "http://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [com.stuartsierra/component "0.3.0"]
-                 [org.immutant/web "2.1.1"]])
+                 [org.immutant/web "2.1.1"]]
+
+  :profiles {:dev {:dependencies [[clj-http "2.0.0"]]}})
