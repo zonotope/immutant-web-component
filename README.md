@@ -9,9 +9,7 @@ It is an adapter for Immutant web to be used in
 ## Installation
 Add the dependency to your `project.clj`:
 
-```Clojure
-[immutant-web-component "0.1.0"]
-```
+[![Clojars Project](http://clojars.org/immutant-web-component/latest-version.svg)](http://clojars.org/immutant-web-component)
 
 ## Usage
 First require the libraries:
@@ -21,16 +19,18 @@ First require the libraries:
          '[com.stuartsierra.component :as component])
 ```
 
-Then you can create a new Immutant web server component. It wil depend on a
-Ring handler component with an `:app` key holding a handler function. Then you
+Then you can create a new Immutant web server component. It wil depend on a Ring
+handler component with an `:handler` key holding a handler function. Then you
 can start and stop it:
 
 ```Clojure
 (def web-server
   (atom (immutant-web-server {:host "localhost" :port "8080"})))
 
-(let [handler {:app (constantly {:status 200 :body "Just handling business."})}]
-  (swap! web-server #(assoc % :handler handler))
+(let [handler-component {:handler (constantly
+                                    {:status 200
+                                     :body "Just handling business."})}]
+  (swap! web-server #(assoc % :handler handler-component))
   (swap! web-server #(component/start %))
   ;; Make some requests to localhost:8080
   (swap! web-server #(component/stop %)))
@@ -45,7 +45,7 @@ Or, you can use it as part of a reloadable system:
 
 (def system
   (component/system-map
-    :handler {:app handler-fn}
+    :handler {:handler handler-fn}
     :server (component/using
               (immutant-web-server {:host "localhost" :port "8080"})
               [:handler])))
