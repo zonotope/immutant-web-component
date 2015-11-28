@@ -6,9 +6,54 @@ A [component](https://github.com/stuartsierra/component) for the
 It is an adapter for Immutant web to be used in
 [reloadable applications](http://thinkrelevance.com/blog/2013/06/04/clojure-workflow-reloaded).
 
+## Installation
+Add the dependency to your `project.clj`:
+
+```Clojure
+[immutant-web-component "0.1.0"]
+```
+
 ## Usage
+First require the libraries:
 
+```Clojure
+(require '[immutant-web-component.core :refer [immutant-web-server]]
+         '[com.stuartsierra.component :as component])
+```
 
+Then you can create a new Immutant web server component. It wil depend on a
+Ring handler component with an `:app` key holding a handler function. Then you
+can start and stop it:
+
+```Clojure
+(def web-server
+  (atom (immutant-web-server {:host "localhost" :port "8080"})))
+
+(let [handler {:app (constantly {:status 200 :body "Just handling business."})}]
+  (swap! web-server #(assoc % :handler handler))
+  (swap! web-server #(component/start %))
+  ;; Make some requests to localhost:8080
+  (swap! web-server #(component/stop %)))
+
+```
+
+Or, you can use it as part of a reloadable system:
+
+```Clojure
+(def handler-fn
+  (constantly {:status 200 :body "I'm still here!"}))
+
+(def system
+  (component/system-map
+    :handler {:app handler-fn}
+    :server (component/using
+              (immutant-web-server {:host "localhost" :port "8080"})
+              [:handler])))
+
+(alter-var-root #'system component/start)
+;; do stuff
+(alter-var-root #'system component/stop)
+```
 
 ## License
 
