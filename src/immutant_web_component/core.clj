@@ -8,14 +8,15 @@
   (start [component]
     (if server
       component
-      (let [host (:host config)
-            port (:port config)
+      (let [host (or (:host config) "0.0.0.0")
+            port (Integer. (:port config))
+            config (assoc config :host host :port port)
             server (do (-> (str "Starting web server. Listening on host: %s "
                                 "and port: %d")
                            (format host port)
                            (println))
                        (web/run (:handler handler) config))]
-        (assoc component :server server))))
+        (assoc component :config config :server server))))
 
   (stop [component]
     (if server
