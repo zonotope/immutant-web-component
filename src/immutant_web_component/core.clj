@@ -20,7 +20,10 @@
 
   (stop [component]
     (if server
-      (do (web/stop server)
+      (do (-> (str "Stopping web server on host: %s and port: %d")
+              (format (:host config) (:port config))
+              (println))
+          (web/stop server)
           (assoc component :server nil))
       component)))
 
