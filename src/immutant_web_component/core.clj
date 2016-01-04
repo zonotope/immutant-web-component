@@ -20,7 +20,7 @@
       component))
 
   (stop [component]
-    (if-let [{server :server} component]
+    (if-let [server (:server component)]
       (do (-> (str "Stopping web server on host: %s and port: %d")
               (format (:host component) (:port component))
               (println))
