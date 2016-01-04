@@ -3,31 +3,32 @@
             [immutant.web :as web])
   (:import java.net.ConnectException))
 
-(defrecord ImmutantWebServerComponent [config handler server]
+(defrecord ImmutantWebServerComponent []
   component/Lifecycle
   (start [component]
-    (if server
-      component
-      (let [host (or (:host config) "0.0.0.0")
-            port (Integer. (:port config))
-            config (assoc config :host host :port port)
+    (if-not (:server component)
+      (let [host (or (:host component) "0.0.0.0")
+            port (Integer. (or (:port component) 8080))
+            config {:host host :port port}
+            handler (:app component)
             server (do (-> (str "Starting web server. Listening on host: %s "
                                 "and port: %d")
                            (format host port)
                            (println))
                        (web/run (:handler handler) config))]
-        (assoc component :config config :server server))))
+        (assoc component :server server))
+      component))
 
   (stop [component]
-    (if server
+    (if-let [{server :server} component]
       (do (-> (str "Stopping web server on host: %s and port: %d")
               (format (:host config) (:port config))
               (println))
           (web/stop server)
-          (assoc component :server nil))
+          (dissoc component :server))
       component)))
 
 (defn immutant-web-component [config]
   "Creates a new immutant web server component that depends on a Ring handler
    component with key :app for the handler function."
-  (map->ImmutantWebServerComponent {:config config}))
+  (map->ImmutantWebServerComponent config))
