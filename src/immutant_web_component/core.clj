@@ -16,13 +16,13 @@
                            (format host port)
                            (println))
                        (web/run (:handler handler) config))]
-        (assoc component :server server))
+        (assoc component :server server :host host :port port))
       component))
 
   (stop [component]
     (if-let [{server :server} component]
       (do (-> (str "Stopping web server on host: %s and port: %d")
-              (format (:host config) (:port config))
+              (format (:host component) (:port component))
               (println))
           (web/stop server)
           (dissoc component :server))
