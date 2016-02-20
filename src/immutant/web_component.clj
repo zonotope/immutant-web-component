@@ -1,4 +1,4 @@
-(ns immutant-web-component.core
+(ns immutant.web-component
   (:require [com.stuartsierra.component :as component]
             [immutant.web :as web])
   (:import java.net.ConnectException))
